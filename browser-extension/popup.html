@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SEIF-GUARD</title><link rel="stylesheet" href="popup.css"></head>
+<body><main class="panel">
+<header><div class="mark">S</div><div><h1>SEIF-GUARD</h1><p>MESSAGING PRIVACY</p></div><span class="status-dot" id="statusDot"></span></header>
+<section class="status-card"><span class="eyebrow">PROTECTION STATUS</span><strong id="statusText">Loading…</strong><small id="statusHint">Your protection is stored on this browser.</small></section>
+<section id="setupSection" class="section hidden"><h2>Create your PIN</h2><p class="muted">Choose a PIN with at least 6 characters. It stays in this browser profile.</p><label for="newPin">New PIN</label><input id="newPin" type="password" minlength="6" autocomplete="new-password" placeholder="At least 6 characters"><label for="confirmPin">Confirm PIN</label><input id="confirmPin" type="password" minlength="6" autocomplete="new-password" placeholder="Repeat your PIN"><button id="savePin" class="primary">Create protection</button></section>
+<section id="controlSection" class="section hidden"><label for="pinInput">Enter PIN to change protection</label><input id="pinInput" type="password" autocomplete="current-password" placeholder="Your SEIF-GUARD PIN"><div class="actions"><button id="lockButton" class="primary">Lock now</button><button id="unlockButton" class="secondary">Unlock</button></div><p id="feedback" class="feedback" role="status"></p></section>
+<section class="sites"><h2>Protected websites</h2><div><span class="site-icon wa">W</span><span>WhatsApp Web</span><span class="enabled">ON</span></div><div><span class="site-icon tg">T</span><span>Telegram Web</span><span class="enabled">ON</span></div><div><span class="site-icon ms">M</span><span>Messenger</span><span class="enabled">ON</span></div></section>
+<footer><span>LOCAL-ONLY · NO ACCOUNT REQUIRED</span><span>SEIF-GUARD 0.1.0</span></footer>
+</main><script src="popup.js"></script></body></html>
