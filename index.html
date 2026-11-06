@@ -24,11 +24,10 @@ button,a{font:inherit}.shell{max-width:1180px;margin:auto;padding:22px}.top{disp
 <article class="card"><div class="ico">◇</div><h3>اختبار سريع</h3><p>تحقق من بعض إمكانات المتصفح الأساسية، دون الادعاء بفحص أمني شامل.</p><button class="btn" data-open="test">ابدأ الاختبار</button></article>
 <article class="card"><div class="ico">? </div><h3>دليل الاستخدام</h3><p>خطوات تثبيت التطبيق والإضافة مع توضيح حدود الحماية.</p><button class="btn" data-open="guide">افتح الدليل</button></article>
 </div></section>
-<section class="section" id="downloads"><h2>مركز التنزيلات</h2><p class="sub">هذه الإصدارات تم التحقق من وجود ملفاتها في GitHub Actions. افتح صفحة البناء ثم قسم Artifacts لتنزيل ZIP.</p>
-<div class="card download"><div><h3>SEIF-GUARD Android · APK تجريبي</h3><p>حزمة Debug APK — ملف البناء موجود، وليس إصداراً منشوراً على Google Play.</p><span class="tag">متوفر · Debug</span></div><a class="btn primary" href="https://github.com/seifjaballah77-eng/SEIF-GUARD/actions/runs/42248451535" target="_blank" rel="noopener">تنزيل من Actions ↗</a></div>
-<div class="card download"><div><h3>SEIF-GUARD Browser Extension</h3><p>حزمة ZIP تتضمن ملفات Chromium وFirefox. افتحها واستخرج المجلد المناسب لمتصفحك.</p><span class="tag">متوفر · ZIP</span></div><a class="btn primary" href="https://github.com/seifjaballah77-eng/SEIF-GUARD/actions/runs/42248451481" target="_blank" rel="noopener">تنزيل من Actions ↗</a></div>
-<div class="notice">ملاحظة: ملفات Actions المؤقتة لها مدة صلاحية محدودة (حتى 90 يوماً في هذه الحزم). ليست روابط APK مباشرة ولا تعني أن التطبيق منشور في متجر Google Play.</div>
-<div class="card"><h3>ملفات المصدر والتعليمات</h3><p>تصفح ملفات المشروع وتعليمات تثبيت إضافة المتصفح.</p><a class="btn" href="https://github.com/seifjaballah77-eng/SEIF-GUARD/tree/main/browser-extension" target="_blank" rel="noopener">ملفات الإضافة ↗</a> <a class="btn" href="https://github.com/seifjaballah77-eng/SEIF-GUARD" target="_blank" rel="noopener">المستودع ↗</a></div>
+<section class="section" id="downloads"><h2>تنزيل الإصدار المناسب</h2><p class="sub">اضغط زر التنزيل الموحد، وسيختار الموقع حزمة Android أو إضافة الكمبيوتر تلقائياً حسب جهازك ومتصفحك.</p>
+<div class="card download"><div><h3 id="deviceTitle">نسخة جهازك</h3><p id="deviceDescription">سيتم تحديد النسخة المناسبة تلقائياً.</p><span class="tag" id="deviceTag">اختيار تلقائي</span></div><a class="btn primary" id="smartDownload" href="https://github.com/seifjaballah77-eng/SEIF-GUARD/releases" rel="noopener">تنزيل الآن ↓</a></div>
+<div class="notice">على Android ينزّل ملف APK مباشرة. على الكمبيوتر ينزّل ZIP الإضافة المناسبة (Chromium أو Firefox). إذا لم يكن النظام مدعوماً، ستظهر صفحة الإصدارات بدلاً من ملف غير مناسب.</div>
+<div class="card"><h3>تنزيل يدوي</h3><p>يمكنك فتح صفحة جميع الإصدارات إذا أردت اختيار حزمة أخرى.</p><a class="btn" href="https://github.com/seifjaballah77-eng/SEIF-GUARD/releases" target="_blank" rel="noopener">كل الإصدارات ↗</a></div>
 </section>
 <section class="section" id="security"><h2>سجل الأمان</h2><p class="sub">هذه الصفحة لا تتصل حالياً بتطبيق الهاتف أو الإضافة لجلب أحداث حقيقية.</p><div class="notice">لا توجد أحداث أمان متصلة لعرضها حالياً. لن نعرض محاولات دخول أو تنبيهات وهمية.</div><ul class="list"><li>سجل محاولات فتح الخزنة: غير متصل</li><li>تنبيهات قفل المواقع: غير متصل</li><li>مزامنة سجل الأجهزة: غير متاحة بعد</li></ul></section>
 <section class="section" id="devices"><h2>إدارة الأجهزة</h2><p class="sub">مركز موحد للأجهزة قيد التجهيز. لا توجد مزامنة حساب أو ربط أجهزة حالياً.</p><div class="cards"><article class="card"><div class="ico">▣</div><h3>Android</h3><p>تطبيق الهاتف متاح كحزمة Debug للتجربة. لا توجد حالة اتصال مباشرة.</p></article><article class="card"><div class="ico">▤</div><h3>الكمبيوتر والمتصفح</h3><p>إضافة المتصفح متاحة كحزمة تجريبية. لم يتم ربطها بلوحة الموقع.</p></article></div></section>
@@ -45,5 +44,16 @@ nav.forEach(b=>b.addEventListener('click',()=>show(b.dataset.section)));
 document.querySelectorAll('a[href="#downloads"]').forEach(a=>a.addEventListener('click',()=>show('downloads')));
 function test(){const items=[['JavaScript',true],['Local storage',(()=>{try{localStorage.setItem('sg-check','1');localStorage.removeItem('sg-check');return true}catch(e){return false}})()],['Secure context (HTTPS)',window.isSecureContext],['Service Worker support','serviceWorker'in navigator],['Web Crypto','crypto'in window&&'subtle'in crypto]];
 document.getElementById('checks').innerHTML=items.map(([n,v])=>'<div class="testrow"><span>'+n+'</span><b class="'+(v?'pass':'')+'">'+(v?'متاح':'غير متاح')+'</b></div>').join('')+'<p style="color:var(--muted);font-size:12px;line-height:1.8">النتائج تصف دعم المتصفح فقط ولا تثبت خلو الجهاز أو الموقع من المخاطر.</p>'}
-document.getElementById('runTest').addEventListener('click',test);document.getElementById('year').textContent=new Date().getFullYear();test();const initial=location.hash.slice(1);if(sections.some(s=>s.id===initial))show(initial);
+document.getElementById('runTest').addEventListener('click',test);
+function configureDownload(){
+ const ua=navigator.userAgent||'';
+ const link=document.getElementById('smartDownload');
+ const title=document.getElementById('deviceTitle'),desc=document.getElementById('deviceDescription'),tag=document.getElementById('deviceTag');
+ let url='https://github.com/seifjaballah77-eng/SEIF-GUARD/releases',name='كل الإصدارات',detail='لم يتم التعرف على نظام مدعوم؛ افتح صفحة الإصدارات لاختيار الحزمة المناسبة.';
+ if(/Android/i.test(ua)){url='https://github.com/seifjaballah77-eng/SEIF-GUARD/releases/download/android-latest/app-debug.apk';name='SEIF-GUARD لهاتف Android';detail='ملف APK مباشر للتثبيت على Android.';}
+ else if(/Firefox/i.test(ua)){url='https://github.com/seifjaballah77-eng/SEIF-GUARD/releases/download/browser-latest/SEIF-GUARD-Firefox.zip';name='إضافة Firefox للكمبيوتر';detail='ملف ZIP مباشر؛ استخرجه ثم اتبع دليل تثبيت الإضافة.';}
+ else if(/Windows|Macintosh|Linux|CrOS/i.test(ua)){url='https://github.com/seifjaballah77-eng/SEIF-GUARD/releases/download/browser-latest/SEIF-GUARD-Chromium.zip';name='إضافة Chromium للكمبيوتر';detail='ملف ZIP مباشر لمتصفحات Chrome وEdge والمتصفحات المتوافقة.';}
+ title.textContent=name;desc.textContent=detail;tag.textContent=url.includes('/releases/download/')?'تنزيل مباشر':'اختيار يدوي';link.href=url;
+}
+document.getElementById('year').textContent=new Date().getFullYear();configureDownload();test();const initial=location.hash.slice(1);if(sections.some(s=>s.id===initial))show(initial);
 </script></body></html>
