@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -115,7 +116,7 @@ private fun IdentityScreen(selected: String, onSelect: (LauncherChoice) -> Unit)
             "اختر الاسم والتصميم الذي سيظهران في الشاشة الرئيسية. يمكنك تغييره لاحقًا.",
             color = Muted,
             fontSize = 14.sp,
-            lineHeight = 21.sp
+            style = TextStyle(lineHeight = 21.sp)
         )
         listOf("Calendar", "Clock", "Files").forEach { identity ->
             Text(identity, color = Neon, fontSize = 17.sp, fontWeight = FontWeight.Bold)
@@ -153,7 +154,7 @@ private fun IdentityScreen(selected: String, onSelect: (LauncherChoice) -> Unit)
             "ملاحظة: قد يحتاج المشغّل إلى لحظات لتحديث الاسم والأيقونة بعد الاختيار. هذا يغيّر اختصار الشاشة الرئيسية فقط، ولا يخفي التطبيق من إعدادات Android.",
             color = Muted,
             fontSize = 12.sp,
-            lineHeight = 18.sp
+            style = TextStyle(lineHeight = 18.sp)
         )
     }
 }
