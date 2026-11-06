@@ -8,17 +8,21 @@ if(chrome.commands&&chrome.commands.onCommand){
   });
 }
 
-// Custom-site support for Chromium: the user grants access only to each
-// domain they add. The registered script runs only on origins the browser
-// has actually granted to this extension.
+// Register only the domains the user has added. This avoids asking for
+// blanket access to every website.
 async function registerCustomSiteScript(){
   if(!chrome.scripting?.registerContentScripts)return;
+  const data=await chrome.storage.local.get(["protectedSites"]);
+  const domains=Array.isArray(data.protectedSites)?data.protectedSites:[];
+  const matches=domains.flatMap(domain=>[`https://${domain}/*`,`https://*.${domain}/*`]);
   try{
-    const existing=await chrome.scripting.getRegisteredContentScripts({ids:["seif-guard-custom-sites"]});
-    if(existing.length)return;
+    await chrome.scripting.unregisterContentScripts({ids:["seif-guard-custom-sites"]});
+  }catch(error){}
+  if(!matches.length)return;
+  try{
     await chrome.scripting.registerContentScripts([{
       id:"seif-guard-custom-sites",
-      matches:["https://*/*"],
+      matches:[...new Set(matches)],
       js:["content.js"],
       runAt:"document_idle",
       persistAcrossSessions:true
@@ -27,10 +31,9 @@ async function registerCustomSiteScript(){
 }
 if(chrome.runtime?.onInstalled)chrome.runtime.onInstalled.addListener(registerCustomSiteScript);
 if(chrome.runtime?.onStartup)chrome.runtime.onStartup.addListener(registerCustomSiteScript);
-registerCustomSiteScript();
-
 if(chrome.runtime?.onMessage){
   chrome.runtime.onMessage.addListener((message)=>{
     if(message?.type==="register-custom-sites")registerCustomSiteScript();
   });
 }
+registerCustomSiteScript();
