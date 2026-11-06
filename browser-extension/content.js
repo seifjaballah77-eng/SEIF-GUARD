@@ -1,6 +1,14 @@
 (() => {
   if(window.top!==window)return;
   let overlay=null, pageUnlocked=false;
+  const DEFAULT_SITES=["web.whatsapp.com","web.telegram.org","messenger.com","www.messenger.com","instagram.com","www.instagram.com"];
+  function isProtectedSite(sites){
+    const host=location.hostname.toLowerCase();
+    return (Array.isArray(sites)?sites:DEFAULT_SITES).some(item=>{
+      const domain=String(item).toLowerCase().replace(/^https?:\\/\\//,"").replace(/^\\*\\./,"").split("/")[0].split(":")[0];
+      return domain && (host===domain || host.endsWith("."+domain));
+    });
+  }
   async function digestPin(pin,salt){
     const enc=new TextEncoder();
     const key=await crypto.subtle.importKey("raw",enc.encode(pin),"PBKDF2",false,["deriveBits"]);
@@ -26,13 +34,12 @@
     });
   }
   function applyState(d){
-    if(!d.pinHash||!d.pinSalt||!d.locked){pageUnlocked=false;removeOverlay();return;}
-    // A new global lock must re-lock even a page unlocked earlier in this tab.
+    if(!isProtectedSite(d.protectedSites)||!d.pinHash||!d.pinSalt||!d.locked){pageUnlocked=false;removeOverlay();return;}
     pageUnlocked=false;
     showOverlay();
   }
-  chrome.storage.local.get(["pinHash","pinSalt","locked"],applyState);
+  chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites"],applyState);
   chrome.storage.onChanged.addListener((changes,area)=>{
-    if(area==="local")chrome.storage.local.get(["pinHash","pinSalt","locked"],applyState);
+    if(area==="local")chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites"],applyState);
   });
 })();
