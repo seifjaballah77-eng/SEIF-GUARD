@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,19 +45,20 @@ data class LauncherChoice(
     val id: String,
     val title: String,
     val variant: String,
-    val alias: String
+    val alias: String,
+    val iconRes: Int
 )
 
 private val choices = listOf(
-    LauncherChoice("calendar_1", "Calendar", "Classic", "com.seifguard.app.CalendarClassic"),
-    LauncherChoice("calendar_2", "Calendar", "Modern", "com.seifguard.app.CalendarModern"),
-    LauncherChoice("calendar_3", "Calendar", "Minimal", "com.seifguard.app.CalendarMinimal"),
-    LauncherChoice("clock_1", "Clock", "Classic", "com.seifguard.app.ClockClassic"),
-    LauncherChoice("clock_2", "Clock", "Modern", "com.seifguard.app.ClockModern"),
-    LauncherChoice("clock_3", "Clock", "Minimal", "com.seifguard.app.ClockMinimal"),
-    LauncherChoice("files_1", "Files", "Classic", "com.seifguard.app.FilesClassic"),
-    LauncherChoice("files_2", "Files", "Modern", "com.seifguard.app.FilesModern"),
-    LauncherChoice("files_3", "Files", "Minimal", "com.seifguard.app.FilesMinimal")
+    LauncherChoice("calendar_1", "Calendar", "Classic", "com.seifguard.app.CalendarClassic", R.drawable.icon_calendar_1),
+    LauncherChoice("calendar_2", "Calendar", "Modern", "com.seifguard.app.CalendarModern", R.drawable.icon_calendar_2),
+    LauncherChoice("calendar_3", "Calendar", "Minimal", "com.seifguard.app.CalendarMinimal", R.drawable.icon_calendar_3),
+    LauncherChoice("clock_1", "Clock", "Classic", "com.seifguard.app.ClockClassic", R.drawable.icon_clock_1),
+    LauncherChoice("clock_2", "Clock", "Modern", "com.seifguard.app.ClockModern", R.drawable.icon_clock_2),
+    LauncherChoice("clock_3", "Clock", "Minimal", "com.seifguard.app.ClockMinimal", R.drawable.icon_clock_3),
+    LauncherChoice("files_1", "Files", "Classic", "com.seifguard.app.FilesClassic", R.drawable.icon_files_1),
+    LauncherChoice("files_2", "Files", "Modern", "com.seifguard.app.FilesModern", R.drawable.icon_files_2),
+    LauncherChoice("files_3", "Files", "Minimal", "com.seifguard.app.FilesMinimal", R.drawable.icon_files_3)
 )
 
 class MainActivity : ComponentActivity() {
@@ -134,14 +137,10 @@ private fun IdentityScreen(selected: String, onSelect: (LauncherChoice) -> Unit)
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(7.dp)
                     ) {
-                        Text(
-                            when (identity) {
-                                "Calendar" -> listOf("▦", "▤", "▣")[group.indexOf(choice)]
-                                "Clock" -> listOf("◷", "◴", "◉")[group.indexOf(choice)]
-                                else -> listOf("▰", "▱", "▣")[group.indexOf(choice)]
-                            },
-                            color = Neon,
-                            fontSize = 28.sp
+                        Image(
+                            painter = painterResource(choice.iconRes),
+                            contentDescription = "${choice.title} ${choice.variant}",
+                            modifier = Modifier.height(34.dp)
                         )
                         Text(choice.variant, color = Color.White, fontSize = 12.sp)
                         if (active) Text("محدد", color = Neon, fontSize = 11.sp)
