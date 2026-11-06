@@ -38,7 +38,7 @@
     pageUnlocked=false;
     showOverlay();
   }
-  chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites"],applyState);
+  chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites","enabledSites"],applyState);
   chrome.storage.onChanged.addListener((changes,area)=>{
     if(area==="local")chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites"],applyState);
   });
