@@ -11,6 +11,7 @@ SEIF-GUARD is an Android privacy app built with Kotlin and Jetpack Compose.
 - Use the Storage Access Framework (SAF) and user-selected files for broad storage compatibility. Adapt media permissions and storage handling to each Android version.
 - Android 10 (API 29) and Android 11+ (API 30+) impose progressively stricter scoped-storage rules. Do not depend on unrestricted access to all files.
 - Lock-screen notification visibility controls are available from API 21, but SEIF-GUARD can control only notifications it posts. It cannot globally hide notifications from other apps.
+- Camera and microphone access must be permission-based, transparent, and subject to Android background-use restrictions.
 - Test on Android 6, 8/9, 10, 11, 13, and current Android versions, plus different manufacturers where possible.
 
 ## Development roadmap (priority order)
@@ -29,7 +30,26 @@ SEIF-GUARD is an Android privacy app built with Kotlin and Jetpack Compose.
 - Auto-lock on app background, screen-off, and configurable inactivity timeout.
 - Never store the PIN or passwords as plain text.
 
-### Phase 2 — Encrypted media and file vault
+### Phase 2 — Guest-first entry and isolated guest space
+- Make the opening screen clearly offer two separate paths: **Owner** and **Guest**.
+- Owner entry always requires the owner's PIN or supported biometric; guest mode must never reveal whether the owner PIN is correct.
+- Guest gets a separate space with its own database, encryption key, files, notes, and settings.
+- Guest cannot browse, search, export, or infer the existence/content of owner vault items.
+- The owner chooses whether guest data is temporary (clear on exit) or retained until manually cleared.
+- Add a clear “Exit guest” action that returns to the entry screen and clears sensitive guest screens from memory.
+- Switching from Guest to Owner requires returning to the entry screen and authenticating as Owner.
+- Do not present this as a separate Android OS user account; it is an isolated in-app profile.
+
+### Phase 3 — Failed-attempt protection and security events
+- Record failed unlock attempts with timestamp, attempt count, and the entry method involved (PIN or biometric result where the OS provides it).
+- Add configurable increasing delays after repeated failures; never permanently lock the legitimate owner out.
+- Show a local incident log after the owner successfully authenticates.
+- Offer optional alerts to the owner after a configurable number of failed attempts, without exposing private content on the lock screen.
+- Optional camera evidence must not be covert: only consider a user-enabled, clearly disclosed capture flow with runtime permission, visible indication, and compliance with Android camera/background restrictions. Never secretly photograph someone or bypass camera indicators/permissions.
+- Microphone/audio recording is not part of automatic failed-attempt detection. Any future audio note or recording must be started deliberately by the user, with microphone permission and a clear recording indicator; obtain consent from people being recorded and follow local law.
+- Do not silently upload, transmit, or share incident evidence.
+
+### Phase 4 — Encrypted media and file vault
 - Import photos, videos, and documents using Android's system file/photo pickers.
 - Encrypt files before storing them in the private app vault.
 - Browse, preview, rename, export, and permanently delete vault items after authentication.
@@ -37,32 +57,21 @@ SEIF-GUARD is an Android privacy app built with Kotlin and Jetpack Compose.
 - Keep originals unchanged unless the user explicitly chooses to delete them.
 - Use SAF and version-specific media access; do not request broad “all files” access unless a clearly justified feature truly needs it.
 
-### Phase 3 — Failed-attempt protection
-- Record failed vault unlock attempts with timestamp and count.
-- Add configurable increasing delays after repeated failures.
-- Show a local security log after successful authentication.
-- Do not silently take photos, record audio, or send data elsewhere.
-
-### Phase 4 — Encrypted notes and password locker
+### Phase 5 — Encrypted notes and password locker
 - Create, edit, search, and organize private notes.
 - Store saved credentials encrypted, with copy/reveal actions protected by re-authentication.
 - Auto-clear copied passwords from the clipboard after a short configurable period where supported.
 - Never sync or export secrets without explicit user action.
 
-### Phase 5 — Emergency quick lock
+### Phase 6 — Emergency quick lock
 - Provide a quick-lock action from inside the app and a persistent optional shortcut.
 - Immediately close the vault, clear sensitive screens from view, and require authentication again.
 - Describe this accurately as locking SEIF-GUARD, not remotely locking the whole phone or hiding other apps.
 
-### Phase 6 — Separate guest profile
-- Add an in-app Guest space with its own encrypted storage and separate key.
-- Keep guest files, notes, and settings isolated from the owner's private space.
-- Allow the owner to clear guest data when leaving guest mode.
-- Do not present this as a separate Android OS user account; availability of system-level multi-user features varies by device.
-
 ### Phase 7 — Encrypted backup and restore
 - Export an encrypted backup chosen by the user through the system file picker.
 - Protect the backup with a separate user-created passphrase or a carefully designed recovery key.
+- Let the owner choose whether guest data is included; exclude it by default.
 - Verify backup integrity before restore and warn before replacing existing vault data.
 - Explain that losing the backup passphrase may make the backup unrecoverable.
 - Keep backups opt-in; do not upload private data automatically.
@@ -78,6 +87,15 @@ SEIF-GUARD is an Android privacy app built with Kotlin and Jetpack Compose.
 - Use Android lock-screen visibility levels where supported (API 21+).
 - Provide instructions to Android Settings for users who want to hide lock-screen content from other apps; do not claim SEIF-GUARD can change those apps' notification settings globally.
 
+## Additional security ideas (later, after core testing)
+
+- Panic shortcut that instantly locks the app and returns to the neutral entry screen.
+- Decoy guest workspace with sample content, clearly separated from the real owner vault and never used to claim that data is deleted when it is not.
+- Optional owner alert when a failed-attempt threshold is reached.
+- Session history showing when Owner and Guest spaces were opened and closed.
+- Automatic lock when the device screen turns off or the app loses focus.
+- Backup integrity check and a recovery test reminder.
+
 ## Security and platform limits
 
 - A normal Android app cannot freely hide itself or other installed apps from Android Settings, app-management screens, or Google Play.
@@ -86,6 +104,7 @@ SEIF-GUARD is an Android privacy app built with Kotlin and Jetpack Compose.
 - Hardware-backed Keystore/StrongBox support varies by device. Detect capabilities and use a safe supported fallback.
 - Android 10+ scoped storage means file access must be permission-aware and based on user selection where possible.
 - In-app Guest mode is separate app data, not a guaranteed separate Android user.
+- Android restricts background camera and microphone access. SEIF-GUARD must not attempt covert recording or bypass permissions, indicators, or consent.
 
 ## Build
 
