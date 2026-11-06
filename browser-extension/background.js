@@ -28,3 +28,9 @@ async function registerCustomSiteScript(){
 if(chrome.runtime?.onInstalled)chrome.runtime.onInstalled.addListener(registerCustomSiteScript);
 if(chrome.runtime?.onStartup)chrome.runtime.onStartup.addListener(registerCustomSiteScript);
 registerCustomSiteScript();
+
+if(chrome.runtime?.onMessage){
+  chrome.runtime.onMessage.addListener((message)=>{
+    if(message?.type==="register-custom-sites")registerCustomSiteScript();
+  });
+}
