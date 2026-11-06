@@ -34,7 +34,7 @@
     });
   }
   function applyState(d){
-    if(!isProtectedSite(d.protectedSites)||!d.pinHash||!d.pinSalt||!d.locked){pageUnlocked=false;removeOverlay();return;}
+    const enabled=Array.isArray(d.enabledSites)?d.enabledSites:d.protectedSites;\n    if(!isProtectedSite(d.protectedSites)||!isProtectedSite(enabled)||!d.pinHash||!d.pinSalt||!d.locked){pageUnlocked=false;removeOverlay();return;}
     pageUnlocked=false;
     showOverlay();
   }
