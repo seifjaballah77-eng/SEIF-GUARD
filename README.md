@@ -16,11 +16,18 @@ SEIF-GUARD is an Android privacy app built with Kotlin and Jetpack Compose.
 
 ## Development roadmap (priority order)
 
-### Phase 0 — Foundation and compatibility
+### Phase 0 — Foundation, first-run guidance, and compatibility
 - Native Android project and launcher identity picker.
 - Calendar, Clock, and Files launcher identities, with three icon variants each.
 - Preserve a clear, honest app identity and explain that these are SEIF-GUARD modes, not the original system apps.
 - Establish a version-aware compatibility layer and a device test matrix.
+- Keep the primary entry actions (Owner and Guest) in a consistent, prominent, easy-to-reach position on the opening screen and across the app's entry points.
+- On the first launch, show a short, skippable walkthrough explaining Owner vs Guest, where the main entry buttons are, how to open the vault, and where Help is located.
+- Show contextual tips the first time the user visits each major area or mode (Vault, Notes, Passwords, Calendar, Clock, Files, Backup, Guest). Mark each tip as seen so it does not repeatedly interrupt the user.
+- Add a persistent, clearly visible Help icon or menu item so guidance is never inaccessible.
+- Add a recovery gesture: tapping the SEIF-GUARD logo at the top of the main screen five times in a short sequence reopens the walkthrough/help guide. The gesture is an extra shortcut, not the only way to find Help.
+- Include a “Show guide again” action in Settings and allow users to reset the tips if they want to learn the app again.
+- Save onboarding/tip completion locally and avoid collecting analytics or sending usage data just to track whether a tip was shown.
 
 ### Phase 1 — Security core (highest priority)
 - App PIN/passcode setup, change, and recovery flow.
