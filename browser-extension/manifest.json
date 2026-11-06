@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "SEIF-GUARD — Privacy Lock",
+  "short_name": "SEIF-GUARD",
+  "version": "0.1.0",
+  "description": "A local privacy lock for selected messaging websites.",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": [
+    "https://web.whatsapp.com/*",
+    "https://web.telegram.org/*",
+    "https://*.web.telegram.org/*",
+    "https://www.messenger.com/*",
+    "https://messenger.com/*"
+  ],
+  "action": {"default_title": "SEIF-GUARD", "default_popup": "popup.html"},
+  "background": {"service_worker": "background.js"},
+  "content_scripts": [{
+    "matches": [
+      "https://web.whatsapp.com/*",
+      "https://web.telegram.org/*",
+      "https://*.web.telegram.org/*",
+      "https://www.messenger.com/*",
+      "https://messenger.com/*"
+    ],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }],
+  "commands": {
+    "toggle-privacy-lock": {
+      "suggested_key": {"default": "Alt+Shift+L"},
+      "description": "Toggle SEIF-GUARD privacy lock"
+    }
+  }
+}
