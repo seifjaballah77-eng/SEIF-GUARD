@@ -31,6 +31,13 @@ SEIF-GUARD is an Android privacy app built with Kotlin and Jetpack Compose.
 
 ### Phase 1 — Security core (highest priority)
 - App PIN/passcode setup, change, and recovery flow.
+- During first-time setup, generate a high-entropy **Recovery Key** (or recovery phrase) that the owner must save offline; show it once, require confirmation, and offer a printable/downloadable recovery card only after a clear warning to keep it private.
+- Add a “Forgot PIN?” path that verifies the Recovery Key locally, then lets the owner create a new PIN without exposing the old PIN.
+- Offer biometric unlock as a convenience, never as the only recovery method; if biometrics stop working, use PIN or Recovery Key.
+- Clearly explain that SEIF-GUARD cannot retrieve or email the forgotten PIN, and that losing both the PIN and Recovery Key may make encrypted vault data permanently unrecoverable.
+- Never add a hidden master password, developer backdoor, or recovery path that silently bypasses encryption.
+- Optional recovery through an online account may be considered only as a separate opt-in service with strong account verification; it must not be required for offline use.
+- Offer periodic reminders to verify that the owner still has the Recovery Key, without displaying the key itself, and a practice recovery test during setup.
 - Optional fingerprint/biometric unlock through AndroidX Biometric.
 - PIN fallback whenever biometric hardware is missing, unavailable, or not enrolled.
 - Encrypt vault data and notes using modern authenticated encryption; protect key material with Android Keystore where supported.
