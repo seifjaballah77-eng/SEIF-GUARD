@@ -27,6 +27,8 @@
   }
   function applyState(d){
     if(!d.pinHash||!d.pinSalt||!d.locked){pageUnlocked=false;removeOverlay();return;}
+    // A new global lock must re-lock even a page unlocked earlier in this tab.
+    pageUnlocked=false;
     showOverlay();
   }
   chrome.storage.local.get(["pinHash","pinSalt","locked"],applyState);
