@@ -1,0 +1,9 @@
+if(chrome.commands&&chrome.commands.onCommand){
+  chrome.commands.onCommand.addListener((command)=>{
+    if(command!=="toggle-privacy-lock")return;
+    chrome.storage.local.get(["pinHash","pinSalt","locked"],(data)=>{
+      if(!data.pinHash||!data.pinSalt)return;
+      chrome.storage.local.set({locked:!data.locked});
+    });
+  });
+}
