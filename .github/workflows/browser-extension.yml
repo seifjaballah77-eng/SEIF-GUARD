@@ -1,0 +1,43 @@
+name: Build SEIF-GUARD browser extensions
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "browser-extension/**"
+      - ".github/workflows/browser-extension.yml"
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Package Chromium extension
+        run: |
+          mkdir -p dist/chromium
+          cp -R browser-extension/. dist/chromium/
+          rm -f dist/chromium/manifest.firefox.json
+          cd dist
+          zip -r SEIF-GUARD-Chromium.zip chromium
+          cd ..
+
+      - name: Package Firefox extension
+        run: |
+          mkdir -p dist/firefox
+          cp -R browser-extension/. dist/firefox/
+          cp dist/firefox/manifest.firefox.json dist/firefox/manifest.json
+          rm -f dist/firefox/manifest.firefox.json
+          cd dist
+          zip -r SEIF-GUARD-Firefox.zip firefox
+          cd ..
+
+      - name: Upload extension packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: SEIF-GUARD-browser-extensions
+          path: |
+            dist/SEIF-GUARD-Chromium.zip
+            dist/SEIF-GUARD-Firefox.zip
+          if-no-files-found: error
