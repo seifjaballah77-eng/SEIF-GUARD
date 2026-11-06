@@ -43,6 +43,7 @@ function renderSites(sites){
     remove.addEventListener("click",async()=>{
       const d=await get(["protectedSites","enabledSites"]);
       await set({protectedSites:(d.protectedSites||[]).filter(x=>x!==domain),enabledSites:(d.enabledSites||sites).filter(x=>x!==domain)});
+      chrome.runtime.sendMessage({type:"register-custom-sites"});
       await refresh();
     });
     row.append(label,remove);list.append(row);
