@@ -4,31 +4,53 @@
   "short_name": "SEIF-GUARD",
   "version": "0.1.0",
   "description": "A local privacy lock for selected messaging websites.",
-  "permissions": ["storage", "tabs"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting"
+  ],
   "host_permissions": [
     "https://web.whatsapp.com/*",
     "https://web.telegram.org/*",
     "https://*.web.telegram.org/*",
     "https://www.messenger.com/*",
-    "https://messenger.com/*"
+    "https://messenger.com/*",
+    "https://www.instagram.com/*",
+    "https://instagram.com/*"
   ],
-  "action": {"default_title": "SEIF-GUARD", "default_popup": "popup.html"},
-  "background": {"service_worker": "background.js"},
-  "content_scripts": [{
-    "matches": [
-      "https://web.whatsapp.com/*",
-      "https://web.telegram.org/*",
-      "https://*.web.telegram.org/*",
-      "https://www.messenger.com/*",
-      "https://messenger.com/*"
-    ],
-    "js": ["content.js"],
-    "run_at": "document_idle"
-  }],
+  "action": {
+    "default_title": "SEIF-GUARD",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://web.whatsapp.com/*",
+        "https://web.telegram.org/*",
+        "https://*.web.telegram.org/*",
+        "https://www.messenger.com/*",
+        "https://messenger.com/*",
+        "https://www.instagram.com/*",
+        "https://instagram.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
   "commands": {
     "toggle-privacy-lock": {
-      "suggested_key": {"default": "Alt+Shift+L"},
+      "suggested_key": {
+        "default": "Alt+Shift+L"
+      },
       "description": "Toggle SEIF-GUARD privacy lock"
     }
-  }
+  },
+  "optional_host_permissions": [
+    "https://*/*"
+  ]
 }
