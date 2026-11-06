@@ -34,12 +34,13 @@
     });
   }
   function applyState(d){
-    const enabled=Array.isArray(d.enabledSites)?d.enabledSites:d.protectedSites;\n    if(!isProtectedSite(d.protectedSites)||!isProtectedSite(enabled)||!d.pinHash||!d.pinSalt||!d.locked){pageUnlocked=false;removeOverlay();return;}
+    const enabled=Array.isArray(d.enabledSites)?d.enabledSites:d.protectedSites;
+    if(!isProtectedSite(d.protectedSites)||!isProtectedSite(enabled)||!d.pinHash||!d.pinSalt||!d.locked){pageUnlocked=false;removeOverlay();return;}
     pageUnlocked=false;
     showOverlay();
   }
   chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites","enabledSites"],applyState);
   chrome.storage.onChanged.addListener((changes,area)=>{
-    if(area==="local")chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites"],applyState);
+    if(area==="local")chrome.storage.local.get(["pinHash","pinSalt","locked","protectedSites","enabledSites"],applyState);
   });
 })();
