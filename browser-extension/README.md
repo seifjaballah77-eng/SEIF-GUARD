@@ -16,7 +16,7 @@ A first browser-extension build for the SEIF-GUARD privacy project. It places a 
 - Dark purple/neon SEIF-GUARD interface.
 - No account or remote server required.
 
-## Install in Chrome, Edge, or compatible Chromium browsers
+## Download packaged builds\n\nA GitHub Actions workflow packages separate Chromium and Firefox ZIP files when browser-extension files change. Open the repository's **Actions** tab, select **Build SEIF-GUARD browser extensions**, and download the `SEIF-GUARD-browser-extensions` artifact from a successful run.\n\n## Install in Chrome, Edge, or compatible Chromium browsers
 1. Download or clone this repository.
 2. Open the browser's extensions page.
 3. Enable Developer mode.
