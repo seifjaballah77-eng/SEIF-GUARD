@@ -5,7 +5,7 @@
   function isProtectedSite(sites){
     const host=location.hostname.toLowerCase();
     return (Array.isArray(sites)?sites:DEFAULT_SITES).some(item=>{
-      const domain=String(item).toLowerCase().replace(/^https?:\\/\\//,"").replace(/^\\*\\./,"").split("/")[0].split(":")[0];
+      const domain=String(item).toLowerCase().replace("https://","").replace("http://","").replace("*.","").split("/")[0].split(":")[0];
       return domain && (host===domain || host.endsWith("."+domain));
     });
   }
