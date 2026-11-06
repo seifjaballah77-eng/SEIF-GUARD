@@ -7,6 +7,9 @@ on:
       - "browser-extension/**"
       - ".github/workflows/browser-extension.yml"
 
+permissions:
+  contents: write
+
 jobs:
   package:
     runs-on: ubuntu-latest
@@ -33,7 +36,23 @@ jobs:
           zip -r SEIF-GUARD-Firefox.zip firefox
           cd ..
 
-      - name: Upload extension packages
+      - name: Publish direct browser downloads
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: browser-latest
+          name: SEIF-GUARD Browser Extensions (latest)
+          target_commitish: ${{ github.sha }}
+          update_tag: true
+          prerelease: true
+          make_latest: false
+          overwrite_files: true
+          files: |
+            dist/SEIF-GUARD-Chromium.zip
+            dist/SEIF-GUARD-Firefox.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload extension packages artifact
         uses: actions/upload-artifact@v4
         with:
           name: SEIF-GUARD-browser-extensions
