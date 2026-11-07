@@ -2,13 +2,9 @@
   "manifest_version": 3,
   "name": "SEIF-GUARD — Privacy Lock",
   "short_name": "SEIF-GUARD",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A local privacy lock for selected messaging websites.",
-  "permissions": [
-    "storage",
-    "tabs",
-    "scripting"
-  ],
+  "permissions": ["storage", "tabs", "scripting", "idle"],
   "host_permissions": [
     "https://web.whatsapp.com/*",
     "https://web.telegram.org/*",
@@ -18,39 +14,30 @@
     "https://www.instagram.com/*",
     "https://instagram.com/*"
   ],
-  "action": {
-    "default_title": "SEIF-GUARD",
-    "default_popup": "popup.html"
-  },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://web.whatsapp.com/*",
-        "https://web.telegram.org/*",
-        "https://*.web.telegram.org/*",
-        "https://www.messenger.com/*",
-        "https://messenger.com/*",
-        "https://www.instagram.com/*",
-        "https://instagram.com/*"
-      ],
-      "js": [
-        "content.js"
-      ],
-      "run_at": "document_idle"
-    }
-  ],
+  "action": {"default_title": "SEIF-GUARD", "default_popup": "popup.html"},
+  "background": {"service_worker": "background.js"},
+  "content_scripts": [{
+    "matches": [
+      "https://web.whatsapp.com/*",
+      "https://web.telegram.org/*",
+      "https://*.web.telegram.org/*",
+      "https://www.messenger.com/*",
+      "https://messenger.com/*",
+      "https://www.instagram.com/*",
+      "https://instagram.com/*"
+    ],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }],
   "commands": {
     "toggle-privacy-lock": {
-      "suggested_key": {
-        "default": "Alt+Shift+L"
-      },
-      "description": "Toggle SEIF-GUARD privacy lock"
+      "suggested_key": {"default": "Alt+Shift+L"},
+      "description": "Lock all protected websites"
+    },
+    "hide-current-page": {
+      "suggested_key": {"default": "Alt+Shift+H"},
+      "description": "Instantly hide the current protected page"
     }
   },
-  "optional_host_permissions": [
-    "https://*/*"
-  ]
+  "optional_host_permissions": ["https://*/*"]
 }
