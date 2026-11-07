@@ -73,6 +73,13 @@ async function changeLock(locked){
 }
 $("lockButton").addEventListener("click",()=>changeLock(true));
 $("unlockButton").addEventListener("click",()=>changeLock(false));
+$("hideNowButton").addEventListener("click",async()=>{
+  const d=await get(["pinHash","pinSalt"]);
+  if(!d.pinHash||!d.pinSalt)return;
+  await set({locked:true});
+  $("feedback").textContent="Protected pages are now hidden.";
+  await refresh();
+});
 $("addSite").addEventListener("click",async()=>{
   const feedback=$("siteFeedback");feedback.textContent="";
   let url;
