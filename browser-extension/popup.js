@@ -21,9 +21,10 @@ function showStatus(locked,configured) {
   $("controlSection").classList.toggle("hidden",!configured);
 }
 async function refresh(){
-  const d=await get(["pinHash","pinSalt","locked","protectedSites"]);
+  const d=await get(["pinHash","pinSalt","locked","protectedSites","autoLockMinutes"]);
   showStatus(Boolean(d.locked),Boolean(d.pinHash&&d.pinSalt));
   if(!Array.isArray(d.protectedSites)){await set({protectedSites:DEFAULT_SITES});d.protectedSites=DEFAULT_SITES;}
+  $("autoLockSelect").value=String(Number(d.autoLockMinutes)||0);
   renderSites(d.protectedSites);
 }
 function renderSites(sites){
@@ -79,6 +80,12 @@ $("hideNowButton").addEventListener("click",async()=>{
   await set({locked:true});
   $("feedback").textContent="Protected pages are now hidden.";
   await refresh();
+});
+$("autoLockSelect").addEventListener("change",async()=>{
+  const minutes=Number($("autoLockSelect").value)||0;
+  await set({autoLockMinutes:minutes});
+  chrome.runtime.sendMessage({type:"configure-auto-lock"});
+  $("feedback").textContent=minutes?("Automatic lock set to "+minutes+" minute(s)."):"Automatic lock is off.";
 });
 $("addSite").addEventListener("click",async()=>{
   const feedback=$("siteFeedback");feedback.textContent="";
