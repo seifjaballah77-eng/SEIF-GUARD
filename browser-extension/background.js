@@ -1,4 +1,22 @@
 // SEIF-GUARD background service worker
+let pinAttemptQueue=Promise.resolve();
+function serializePinAttempt(task){const next=pinAttemptQueue.then(task,task);pinAttemptQueue=next.catch(()=>{});return next;}
+async function readPinLockState(){
+ const data=await chrome.storage.local.get(['pinFailedAttempts','pinLockUntil']);
+ const until=Number(data.pinLockUntil)||0;
+ if(until&&until<=Date.now()){await chrome.storage.local.set({pinFailedAttempts:0,pinLockUntil:0});return {locked:false,attempts:0,lockUntil:0,remainingMs:0,attemptsLeft:15};}
+ const attempts=Number(data.pinFailedAttempts)||0;
+ return {locked:until>Date.now(),attempts,lockUntil:until,remainingMs:Math.max(0,until-Date.now()),attemptsLeft:Math.max(0,15-attempts)};
+}
+async function handlePinResult(success){return serializePinAttempt(async()=>{
+ const state=await readPinLockState();
+ if(state.locked)return {accepted:false,...state};
+ if(success){await chrome.storage.local.set({pinFailedAttempts:0,pinLockUntil:0});return {accepted:true,locked:false,attempts:0,attemptsLeft:15,lockUntil:0,remainingMs:0};}
+ const attempts=state.attempts+1;
+ if(attempts>=15){const lockUntil=Date.now()+120000;await chrome.storage.local.set({pinFailedAttempts:15,pinLockUntil:lockUntil});return {accepted:false,locked:true,attempts:15,attemptsLeft:0,lockUntil,remainingMs:120000};}
+ await chrome.storage.local.set({pinFailedAttempts:attempts,pinLockUntil:0});
+ return {accepted:false,locked:false,attempts,attemptsLeft:15-attempts,lockUntil:0,remainingMs:0};
+});}
 async function registerCustomSiteScript(){
   if(!chrome.scripting?.registerContentScripts)return;
   const data=await chrome.storage.local.get(["protectedSites"]);
@@ -44,6 +62,8 @@ async function checkWithSafeBrowsing(url){
 }
 if(chrome.runtime?.onMessage){
   chrome.runtime.onMessage.addListener((message,sender,sendResponse)=>{
+    if(message?.type==="sg-pin-status"){serializePinAttempt(()=>readPinLockState()).then(sendResponse);return true;}
+    if(message?.type==="sg-pin-result" && typeof message.success==="boolean"){handlePinResult(message.success).then(sendResponse);return true;}
     if(message?.type==="sg-check-url" && typeof message.url==="string"){
       checkWithSafeBrowsing(message.url).then(sendResponse);
       return true;
