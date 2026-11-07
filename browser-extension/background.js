@@ -42,7 +42,7 @@ async function checkWithSafeBrowsing(url){
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        client:{clientId:"seif-guard",clientVersion:"0.4.0"},
+        client:{clientId:"seif-guard",clientVersion:"0.5.0"},
         threatInfo:{
           threatTypes:["MALWARE","SOCIAL_ENGINEERING","UNWANTED_SOFTWARE"],
           platformTypes:["ANY_PLATFORM"],
