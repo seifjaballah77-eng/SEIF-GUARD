@@ -2,10 +2,12 @@
   "manifest_version": 3,
   "name": "SEIF-GUARD — Privacy Lock",
   "short_name": "SEIF-GUARD",
-  "version": "0.3.0",
-  "description": "A local privacy lock for selected messaging websites.",
+  "version": "0.4.0",
+  "description": "Privacy lock and anti-phishing protection for the browser.",
   "permissions": ["storage", "tabs", "scripting", "idle"],
   "host_permissions": [
+    "<all_urls>",
+    "https://safebrowsing.googleapis.com/*",
     "https://web.whatsapp.com/*",
     "https://web.telegram.org/*",
     "https://*.web.telegram.org/*",
@@ -17,6 +19,10 @@
   "action": {"default_title": "SEIF-GUARD", "default_popup": "popup.html"},
   "background": {"service_worker": "background.js"},
   "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["phishing-guard.js"],
+    "run_at": "document_start"
+  },{
     "matches": [
       "https://web.whatsapp.com/*",
       "https://web.telegram.org/*",
