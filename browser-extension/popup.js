@@ -1,6 +1,9 @@
 const $ = (id) => document.getElementById(id);
 const get = (keys) => new Promise(resolve => chrome.storage.local.get(keys, resolve));
 const set = (values) => new Promise(resolve => chrome.storage.local.set(values, resolve));
+const send = (message) => new Promise(resolve => chrome.runtime.sendMessage(message,response=>resolve(chrome.runtime.lastError?null:response)));
+const formatRemaining = ms => {const seconds=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");};
+async function updatePinLockout(){const state=await send({type:"sg-pin-status"});const el=$("pinLockout");if(!el||!state)return;el.classList.toggle("hidden",!state.locked);el.textContent=state.locked?"Too many incorrect PIN attempts. Try again in "+formatRemaining(state.remainingMs):"";}
 const DEFAULT_SITES=["web.whatsapp.com","web.telegram.org","messenger.com","instagram.com"];
 const SITE_NAMES={"web.whatsapp.com":"WhatsApp Web","web.telegram.org":"Telegram Web","messenger.com":"Messenger","instagram.com":"Instagram"};
 async function digestPin(pin, salt) {
@@ -24,6 +27,7 @@ async function refresh(){
   const phishing=await get(["safeBrowsingApiKey"]);
   $("safeBrowsingKey").value=phishing.safeBrowsingApiKey||"";
   const d=await get(["pinHash","pinSalt","locked","protectedSites","autoLockMinutes"]);
+  await updatePinLockout();
   showStatus(Boolean(d.locked),Boolean(d.pinHash&&d.pinSalt));
   if(!Array.isArray(d.protectedSites)){await set({protectedSites:DEFAULT_SITES});d.protectedSites=DEFAULT_SITES;}
   $("autoLockSelect").value=String(Number(d.autoLockMinutes)||0);
@@ -68,8 +72,14 @@ $("savePin").addEventListener("click",async()=>{
   $("newPin").value="";$("confirmPin").value="";await refresh();
 });
 async function changeLock(locked){
+  const state=await send({type:"sg-pin-status"});
+  if(state?.locked){$("feedback").textContent="PIN entry is locked for "+formatRemaining(state.remainingMs)+".";await updatePinLockout();return;}
   const d=await get(["pinHash","pinSalt"]),pin=$("pinInput").value;
-  if(!await verifyPin(pin,d)){$("feedback").textContent="Incorrect PIN. Protection was not changed.";return;}
+  const correct=await verifyPin(pin,d);
+  const result=await send({type:"sg-pin-result",success:correct});
+  if(result?.locked){$("feedback").textContent="15 incorrect attempts. PIN entry locked for 2 minutes.";await updatePinLockout();return;}
+  if(!correct){$("feedback").textContent="Incorrect PIN. "+(result?.attemptsLeft??"")+" attempts remaining before a 2-minute lock.";$("pinInput").value="";return;}
+  if(!result?.accepted){$("feedback").textContent="PIN is temporarily locked.";await updatePinLockout();return;}
   await set({locked});$("pinInput").value="";
   $("feedback").textContent=locked?"Privacy lock activated.":"Privacy lock deactivated.";
   await refresh();
@@ -119,3 +129,5 @@ $("saveSafeBrowsingKey").addEventListener("click",async()=>{
   await set({safeBrowsingApiKey:key});
   $("phishingFeedback").textContent=key?"تم حفظ المفتاح محلياً. فحص Google Safe Browsing أصبح مفعلاً.":"تم حذف المفتاح. سيبقى التحليل المحلي فقط.";
 });
+
+setInterval(updatePinLockout,1000);
