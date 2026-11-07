@@ -3,3 +3,5 @@
 
 .hide-now{width:100%;margin-top:9px;background:#29101d;color:#ffb3c4;border:1px solid #81405a;box-shadow:0 0 14px #e34c7c22}
 .hide-now:hover{background:#3a1728}
+
+.auto-lock{margin-top:14px;padding:12px;border:1px solid #39234b;border-radius:11px;background:#120b1b}.auto-lock label{display:block;font-size:11px;color:#d8c2e8;margin:0 0 8px}.auto-lock select{width:100%;padding:10px;border:1px solid #583875;border-radius:8px;background:#0c0813;color:#fff;font-size:12px}.shortcut-help{display:grid;gap:7px;margin-top:12px;padding:12px;border:1px solid #39234b;border-radius:11px;background:#120b1b}.shortcut-help strong{font-size:11px;color:#e6d4f4}.shortcut-help span{font-size:10px;color:#bda9cb}.shortcut-help kbd{display:inline-block;padding:3px 5px;border:1px solid #604477;border-radius:5px;background:#21152d;color:#f1ddff;font:10px Segoe UI,Arial,sans-serif}
