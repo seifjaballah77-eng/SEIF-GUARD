@@ -49,7 +49,6 @@
     root.querySelector("h2").textContent = title;
     root.querySelector(".sgp-intro").textContent = details;
     const ul = root.querySelector("ul");
-    for (const item of arguments[1] instanceof Array ? details : []) { const li=document.createElement("li");li.textContent=item;ul.append(li); }
     if (Array.isArray(details)) {
       root.querySelector(".sgp-intro").textContent = "تم رصد مؤشرات تستحق الحذر:";
       for (const item of details) { const li=document.createElement("li");li.textContent=item;ul.append(li); }
