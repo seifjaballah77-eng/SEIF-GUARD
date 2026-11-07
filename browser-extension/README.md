@@ -50,3 +50,33 @@ A custom entry protects the whole website domain (including its subdomains), not
 The quick-unlock phrase is a deliberate convenience bypass, not strong authentication. It is embedded in the extension's client-side code, so someone who can inspect the extension files can discover it. Anyone who knows the phrase can bypass the PIN screen. Do not use this build as a high-security vault.
 
 The panic-hide shortcut covers only the current protected tab until that tab is reloaded; use the lock-all shortcut to lock all selected sites persistently. A person who can control the same unlocked browser profile, open developer tools, remove the extension, or access the computer as its owner may bypass it. The extension does not encrypt the messaging service's own local database, prevent screenshots, or lock native desktop/mobile apps. Keep the computer account protected.
+
+## Anti-phishing protection (Chrome / Chromium)
+
+Version 0.4.0 adds a link-checking layer on ordinary HTTP(S) pages:
+
+- Checks clicked links before navigating.
+- Shows a warning screen when local URL heuristics find suspicious indicators.
+- Optionally checks clicked URLs against Google Safe Browsing (malware, social engineering/phishing, and unwanted software lists).
+- If the reputation service cannot be reached, it does not label the URL safe; it asks whether to return or continue.
+- Only the clicked destination URL is submitted for a Google lookup when an API key is configured.
+
+### Enable Google Safe Browsing
+
+1. Create/select a Google Cloud project and enable the Safe Browsing API.
+2. Create an API key according to Google's documentation.
+3. Open the SEIF-GUARD extension popup.
+4. Paste the key into **Google Safe Browsing API key** and save it.
+
+The key is stored in this browser profile using extension local storage. Restrict the key to the Safe Browsing API in Google Cloud where supported. Do not reuse a privileged server key or a key that grants access to unrelated services.
+
+Official API documentation: https://developers.google.com/safe-browsing/reference/rest/v4/threatMatches/find
+
+### Permission and privacy notes
+
+- Anti-phishing link inspection runs on all ordinary web pages. Chrome therefore requests broad site access. Restricting extension site access in Chrome settings also restricts coverage.
+- The full clicked URL is sent to Google only when an API key is configured and the reputation lookup runs.
+- Local heuristics can produce false positives and can miss new phishing sites. A clean Safe Browsing result is not a guarantee that a site is trustworthy.
+- Keep Chrome Safe Browsing enabled. This extension is an additional layer, not a replacement.
+- It does not intercept every navigation path (for example, manually typed addresses or every script-driven redirect); do not treat it as complete browser-wide protection.
+- Google's API usage terms and eligibility apply. Review current terms before commercial distribution.
