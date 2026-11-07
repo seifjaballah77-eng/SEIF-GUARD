@@ -80,3 +80,13 @@ Official API documentation: https://developers.google.com/safe-browsing/referenc
 - Keep Chrome Safe Browsing enabled. This extension is an additional layer, not a replacement.
 - It does not intercept every navigation path (for example, manually typed addresses or every script-driven redirect); do not treat it as complete browser-wide protection.
 - Google's API usage terms and eligibility apply. Review current terms before commercial distribution.
+
+
+## PIN brute-force delay
+
+- Failed PIN checks are counted across protected-page unlock screens and the extension popup.
+- After 15 consecutive incorrect PIN attempts, PIN verification is blocked for 2 minutes.
+- A visible mm:ss countdown is shown while the lockout is active.
+- The lockout expiry timestamp and failed-attempt count are stored in extension local storage, so closing the popup or restarting the browser does not reset an active delay.
+- A correct PIN resets the consecutive-failure counter. Incorrect attempts during an active delay are not processed.
+- This is a rate-limit deterrent, not a guarantee against someone who can modify extension storage or source code. The existing emergency quick-unlock phrase remains a separate convenience bypass and is not strong authentication.
