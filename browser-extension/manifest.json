@@ -2,9 +2,14 @@
   "manifest_version": 3,
   "name": "SEIF-GUARD — Privacy Lock",
   "short_name": "SEIF-GUARD",
-  "version": "0.4.0",
-  "description": "Privacy lock and anti-phishing protection for the browser.",
-  "permissions": ["storage", "tabs", "scripting", "idle"],
+  "version": "0.5.0",
+  "description": "Privacy lock, anti-phishing checks, and PIN brute-force delay for the browser.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "idle"
+  ],
   "host_permissions": [
     "<all_urls>",
     "https://safebrowsing.googleapis.com/*",
@@ -16,34 +21,54 @@
     "https://www.instagram.com/*",
     "https://instagram.com/*"
   ],
-  "action": {"default_title": "SEIF-GUARD", "default_popup": "popup.html"},
-  "background": {"service_worker": "background.js"},
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["phishing-guard.js"],
-    "run_at": "document_start"
-  },{
-    "matches": [
-      "https://web.whatsapp.com/*",
-      "https://web.telegram.org/*",
-      "https://*.web.telegram.org/*",
-      "https://www.messenger.com/*",
-      "https://messenger.com/*",
-      "https://www.instagram.com/*",
-      "https://instagram.com/*"
-    ],
-    "js": ["content.js"],
-    "run_at": "document_idle"
-  }],
+  "action": {
+    "default_title": "SEIF-GUARD",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "phishing-guard.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://web.whatsapp.com/*",
+        "https://web.telegram.org/*",
+        "https://*.web.telegram.org/*",
+        "https://www.messenger.com/*",
+        "https://messenger.com/*",
+        "https://www.instagram.com/*",
+        "https://instagram.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
   "commands": {
     "toggle-privacy-lock": {
-      "suggested_key": {"default": "Alt+Shift+L"},
+      "suggested_key": {
+        "default": "Alt+Shift+L"
+      },
       "description": "Lock all protected websites"
     },
     "hide-current-page": {
-      "suggested_key": {"default": "Alt+Shift+H"},
+      "suggested_key": {
+        "default": "Alt+Shift+H"
+      },
       "description": "Instantly hide the current protected page"
     }
   },
-  "optional_host_permissions": ["https://*/*"]
+  "optional_host_permissions": [
+    "https://*/*"
+  ]
 }
