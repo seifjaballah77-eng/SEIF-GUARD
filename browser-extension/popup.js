@@ -21,6 +21,8 @@ function showStatus(locked,configured) {
   $("controlSection").classList.toggle("hidden",!configured);
 }
 async function refresh(){
+  const phishing=await get(["safeBrowsingApiKey"]);
+  $("safeBrowsingKey").value=phishing.safeBrowsingApiKey||"";
   const d=await get(["pinHash","pinSalt","locked","protectedSites","autoLockMinutes"]);
   showStatus(Boolean(d.locked),Boolean(d.pinHash&&d.pinSalt));
   if(!Array.isArray(d.protectedSites)){await set({protectedSites:DEFAULT_SITES});d.protectedSites=DEFAULT_SITES;}
@@ -108,3 +110,12 @@ $("addSite").addEventListener("click",async()=>{
   }catch(error){feedback.textContent="Could not add this website: "+(error.message||"permission error");}
 });
 refresh();
+$("saveSafeBrowsingKey").addEventListener("click",async()=>{
+  const key=$("safeBrowsingKey").value.trim();
+  if(key && !/^[A-Za-z0-9_\\-]{20,}$/.test(key)){
+    $("phishingFeedback").textContent="تحقق من مفتاح API؛ يبدو أن صيغته غير صحيحة.";
+    return;
+  }
+  await set({safeBrowsingApiKey:key});
+  $("phishingFeedback").textContent=key?"تم حفظ المفتاح محلياً. فحص Google Safe Browsing أصبح مفعلاً.":"تم حذف المفتاح. سيبقى التحليل المحلي فقط.";
+});
